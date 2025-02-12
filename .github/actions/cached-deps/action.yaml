@@ -1,0 +1,16 @@
+name: 'Get & Cache Dependencies'
+# there is no on: because it is not a workflow, hence don't need a trigger
+description: 'Get the dependencies (via npm) and cache them'
+runs: # a must attribute
+  using: 'composite' # describes the action method - reuqired
+  steps: # defined as in the workflow definitions file
+    - name: Cache dependencies
+      id: cache
+      uses: actions/cache@v4 #we can use other actions in our own actions
+      with:
+        path: node_modules
+        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+    - name: Install dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm ci # if we're using a run key we need to add a shell
+      shell: bash #we want this to run on a bash shell
