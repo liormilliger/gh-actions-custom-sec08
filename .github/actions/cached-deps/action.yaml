@@ -28,5 +28,5 @@ runs: # a must attribute
       if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
       run: |
         npm ci
-        echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUTS
+        echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
       shell: bash #we want this to run on a bash shell
