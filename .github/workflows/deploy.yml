@@ -10,10 +10,13 @@ jobs:
       - name: Get code
         uses: actions/checkout@v4
       - name: Load and Cache dependencies
+        id: cache-deps
         uses: ./.github/actions/cached-deps #constructing a path relative from the root project folder
         # We want to cancel caching for this job using the action inputs
         with:
-          caching: 'false'      
+          caching: 'false'
+      - name: Output Information
+        run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
       - name: Lint code
         run: npm run lint
   test:

@@ -7,7 +7,11 @@ inputs:
     required: false # We define whether this input is needed or not.
               # True means that users must provide a value in their workflows when using this action and if don't the action would fail
               # False mean that users are not required to provide a value, and in order for that action to not fail we can add a default value
-    default: 'true'          
+    default: 'true'
+outputs: # Much like the inputs structure
+  used-cache:
+    description: 'Whether the cache was used'
+    value: ${{ steps.install.outputs.cache }} #we need to make sure the refferred step has an id
 runs: # a must attribute
   using: 'composite' # describes the action method - reuqired
   steps: # defined as in the workflow definitions file
@@ -20,6 +24,9 @@ runs: # a must attribute
         path: node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install dependencies
+      id: install
       if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
-      run: npm ci # if we're using a run key we need to add a shell
+      run: |
+        npm ci
+        echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUTS
       shell: bash #we want this to run on a bash shell
