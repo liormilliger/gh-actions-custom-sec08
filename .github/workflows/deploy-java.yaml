@@ -71,4 +71,4 @@ jobs:
         with:
           bucket: liorm-github-actions-bucket
           dist-folder: ./dist
-          # bucket-region: us-east-1
+          bucket-region: us-east-1
